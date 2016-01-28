@@ -9,6 +9,8 @@
 #define TASKS "tasks"
 #define DATA "data"
 
+#define API_KEY_PATH "api.key"
+
 enum RunType {
     NO_TYPE,
     GENERATE,

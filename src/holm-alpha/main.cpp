@@ -40,6 +40,7 @@ bool isValidList(QString name){
 
 int main(int argc, char *argv[]){
     cout << "HOLM-alpha starting..." << endl;
+    QCoreApplication a(argc, argv);
 
     //check here if SSL is available, if not, abort
     if(!QSslSocket::supportsSsl()){
@@ -79,7 +80,17 @@ int main(int argc, char *argv[]){
     }
     Logger::setLevel((LogLevel)logLevel);
 
-    //TODO: check here, if there is a config with an API key, if not, ask for one and check it then.
+    //check here, if there is a config with an API key, if not, ask for one and check it then.
+    ApiManager apiManager;
+    while(!apiManager.validApiAvailable()){
+        //get api from console
+        cout << "You have not set up an API key, or your entered API key is invalid!" << endl << "Please enter your API key here:" << endl;
+        string in;
+        cin >> in;
+        if(in.length() > 0){
+            apiManager.setKey(in.c_str());
+        }
+    }
 
     //TODO: check folders existing (tasks, data)
 
@@ -123,7 +134,6 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
-    QCoreApplication a(argc, argv);
     return a.exec();
 }
 
