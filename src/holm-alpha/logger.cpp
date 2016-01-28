@@ -11,3 +11,7 @@ void Logger::log(QString msg, LogLevel lvl){
 void Logger::setLevel(LogLevel lvl){
     level = lvl;
 }
+
+LogLevel Logger::getLevel(){
+    return level;
+}

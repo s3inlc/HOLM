@@ -17,6 +17,7 @@ class Logger : public QObject
 public:
     static void log(QString msg, LogLevel lvl);
     static void setLevel(LogLevel lvl);
+    static LogLevel getLevel();
 
 signals:
 

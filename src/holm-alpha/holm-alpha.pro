@@ -21,10 +21,12 @@ TEMPLATE = app
 SOURCES += main.cpp \
     taskparser.cpp \
     apimanager.cpp \
-    logger.cpp
+    logger.cpp \
+    generator.cpp
 
 HEADERS += \
     defines.h \
     taskparser.h \
     apimanager.h \
-    logger.h
+    logger.h \
+    generator.h
