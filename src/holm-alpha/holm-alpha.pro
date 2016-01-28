@@ -5,7 +5,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core network
 
 QT       -= gui
 
@@ -15,10 +15,16 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+# Uncomment this for compiling with windows
+# LIBS += -LC:\OpenSSL-Win32\lib -lssleay32 -llibeay32
 
 SOURCES += main.cpp \
-    taskparser.cpp
+    taskparser.cpp \
+    apimanager.cpp \
+    logger.cpp
 
 HEADERS += \
     defines.h \
-    taskparser.h
+    taskparser.h \
+    apimanager.h \
+    logger.h
