@@ -1,11 +1,17 @@
 #include <QCoreApplication>
 #include <QList>
 #include <iostream>
+#include <QSsl>
+#include <QSslSocket>
 #include "defines.h"
+#include "logger.h"
+#include "taskparser.h"
+#include "apimanager.h"
 using namespace std;
 
 void showHelp(){
     //TODO: show help
+    cout << "HOLM-alpha " << HOLM_VERSION << endl;
 }
 
 bool isValidList(QString name){
@@ -33,10 +39,18 @@ bool isValidList(QString name){
 }
 
 int main(int argc, char *argv[]){
+    cout << "HOLM-alpha starting..." << endl;
+
+    //check here if SSL is available, if not, abort
+    if(!QSslSocket::supportsSsl()){
+        cout << "HTTPS libs are not available, required to run!" << endl;
+        return -1;
+    }
+
     RunType task = NO_TYPE;
     bool looping = false;
     bool newLists = true;
-    int logLevel = 1; // 1 -> normal, 2 -> increased, 3 -> debug
+    int logLevel = 0; // 0 -> normal, 1 -> increased, 2 -> debug
     QList<QString> config;
     for(int x=1;x<argc;x++){
         //filter out the global configurations
@@ -53,7 +67,7 @@ int main(int argc, char *argv[]){
                 return 0;
             }
             logLevel = atoi(argv[x + 1]);
-            if(logLevel < 1 || logLevel > 3){
+            if(logLevel < 0 || logLevel > 2){
                 cout << "Invalid verbose level!" << endl << endl;
                 showHelp();
                 return 0;
@@ -63,8 +77,11 @@ int main(int argc, char *argv[]){
             config.append(argv[x]);
         }
     }
+    Logger::setLevel((LogLevel)logLevel);
 
     //TODO: check here, if there is a config with an API key, if not, ask for one and check it then.
+
+    //TODO: check folders existing (tasks, data)
 
     //parse arguments
     if(config.size() < 1){
@@ -100,6 +117,10 @@ int main(int argc, char *argv[]){
         //execute all tasks within the task directory
         task = MULTI_TASK;
         //TODO: call multiple task execution
+    }
+    else{
+        showHelp();
+        return 0;
     }
 
     QCoreApplication a(argc, argv);
