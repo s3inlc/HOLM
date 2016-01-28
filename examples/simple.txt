@@ -1,1 +1,17 @@
-#TODO 
+# Simple task example
+# holm-alpha
+
+# hashcat binary path
+hashcat="/home/s3inlc/oclHashcat/oclHashcat64.bin"
+
+# provide hash algorithm with hashcat number
+algorithm=0
+
+# hashlist to run against
+list=32
+
+# hashlist type (old/new)
+type=old
+
+# call string for wordlists, mask, dictionaries, hashcat config...
+call=-a 0 dicts/mydict.txt -r rules/myrule.rule
