@@ -1,4 +1,4 @@
-# holm
-HOLM (Hashes.Org Left Manager)
+# HOLM (Hashes.Org Left Manager)
 
-Currently in development...
+
+HOLM-alpha currently in development...
