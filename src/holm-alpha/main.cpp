@@ -3,6 +3,8 @@
 #include <iostream>
 #include <QSsl>
 #include <QSslSocket>
+#include <QDir>
+#include <sys/stat.h>
 #include "defines.h"
 #include "logger.h"
 #include "taskparser.h"
@@ -92,7 +94,23 @@ int main(int argc, char *argv[]){
         }
     }
 
-    //TODO: check folders existing (tasks, data)
+    //check if folders exist (tasks, data)
+    QDir taskDir(TASKS);
+    if(!taskDir.exists()){
+#ifdef WIN_32
+        mkdir(TASKS);
+#else
+        mkdir(TASKS, 0777);
+#endif
+    }
+    QDir dataDir(DATA);
+    if(!dataDir.exists()){
+#ifdef WIN_32
+        mkdir(DATA);
+#else
+        mkdir(DATA, 0777);
+#endif
+    }
 
     //parse arguments
     if(config.size() < 1){
