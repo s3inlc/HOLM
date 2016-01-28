@@ -21,3 +21,7 @@
 *.la
 *.a
 *.lib
+
+# Build directories of Qt
+build-holm-*
+*.user
