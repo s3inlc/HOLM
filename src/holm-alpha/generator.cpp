@@ -7,6 +7,7 @@ Generator::Generator(QObject *parent) : QThread(parent){
     connect(this, SIGNAL(triggerDownloadFile(QString,bool)), this, SLOT(downloadFile(QString,bool)));
     connect(this, SIGNAL(triggerCheckChecksum(QString,bool)), this, SLOT(checkChecksum(QString,bool)));
     connect(this, SIGNAL(triggerGetIdentifiers()), this, SLOT(getIdentifiers()));
+    connect(this, SIGNAL(triggerCreateList(QString,bool)), this, SLOT(createList(QString,bool)));
 }
 
 void Generator::setLists(QList<QString> list, bool listType){
@@ -16,7 +17,7 @@ void Generator::setLists(QList<QString> list, bool listType){
 }
 
 Generator::~Generator(){
-    //
+    delete downloadManager;
 }
 
 void Generator::run(){
@@ -74,11 +75,37 @@ void Generator::run(){
 }
 
 void Generator::createList(QString name, bool newLists){
-    //check for checksum
+    //load all identifiers into RAM
+    generating = true;
+    QMap<QString,bool> data;
+    for(int x=0;x<currentIdentifiers.size();x++){
+        //get identifier file if existing
+        QString identifierPath = DATA + QString("/") + currentIdentifiers.at(x) + ".txt";
+        QFile id(identifierPath);
+        if(!id.exists()){
+            //if it doesn't exist, we will ignore it
+            continue;
+        }
+        QString idData = fileGetContents(identifierPath);
+        QStringList list = idData.replace("\r\n", "\n").split("\n");
+        for(int y=0;y<list.size();y++){
+            QString hash;
+            bool act;
+            if(list.at(y).contains(":")){
+                //salted list
+            }
+            else{
+                //unsalted hash
+            }
+        }
+    }
 
-    //load identifiers
+    //open list and file path to write to
 
-    //create file
+    //go trough list and remove/add hashes
+
+    //end
+    generating = false;
 }
 
 void Generator::downloadFile(QString name, bool newLists){
@@ -237,6 +264,16 @@ QString Generator::byteToStr(QByteArray arr){
         res += s.str().c_str();
     }
     return QString(res.c_str());
+}
+
+QString Generator::fileGetContents(QString path){
+    QFile f(path);
+    if(!f.open(QFile::ReadOnly)){
+        Logger::log("Failed to open file: '" + path + "!", INCREASED);
+        return;
+    }
+    QTextStream in(&f);
+    return in.readAll();
 }
 
 QByteArray Generator::fileChecksum(const QString &fileName, QCryptographicHash::Algorithm hashAlgorithm){

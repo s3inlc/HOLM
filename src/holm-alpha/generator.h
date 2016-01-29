@@ -16,8 +16,9 @@ class Generator : public QThread{
 public:
     explicit Generator(QObject *parent = 0);
     void setLists(QList<QString> list, bool listType);
-    QByteArray fileChecksum(const QString &fileName, QCryptographicHash::Algorithm hashAlgorithm);
+    static QByteArray fileChecksum(const QString &fileName, QCryptographicHash::Algorithm hashAlgorithm);
     static QString byteToStr(QByteArray arr);
+    static QString fileGetContents(QString path);
     ~Generator();
 
 signals:
@@ -32,6 +33,7 @@ public slots:
     void downloadRead();
     void checkChecksum(QString name, bool newLists);
     void getIdentifiers();
+    void createList(QString name, bool newLists);
 
 private:
     void run();
@@ -42,7 +44,6 @@ private:
     int lastPercent;
     QNetworkAccessManager *downloadManager;
     QNetworkReply *downloadReply;
-    void createList(QString name, bool newLists);
 };
 
 #endif // GENERATOR_H
