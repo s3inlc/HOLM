@@ -9,6 +9,7 @@
 #include "logger.h"
 #include "taskparser.h"
 #include "apimanager.h"
+#include "generator.h"
 using namespace std;
 
 void showHelp(){
@@ -75,6 +76,7 @@ int main(int argc, char *argv[]){
                 showHelp();
                 return 0;
             }
+            x++;
         }
         else{
             config.append(argv[x]);
@@ -112,6 +114,8 @@ int main(int argc, char *argv[]){
 #endif
     }
 
+    Generator gen;
+
     //parse arguments
     if(config.size() < 1){
         cout << "Invalid number of arguments!" << endl << endl;
@@ -131,6 +135,9 @@ int main(int argc, char *argv[]){
             toGenerate.append(config.at(x));
         }
         //TODO: call single generation here
+        gen.setLists(toGenerate, newLists);
+        gen.start();
+        QObject::connect(&gen, SIGNAL(finished()), &a, SLOT(quit()));
     }
     else if(config.at(0).compare("single") == 0){
         //execute a single task

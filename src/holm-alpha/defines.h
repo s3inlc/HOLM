@@ -12,6 +12,8 @@
 
 #define API_KEY_PATH "api.key"
 
+#define UINT8 uint8_t
+
 enum RunType {
     NO_TYPE,
     GENERATE,
