@@ -134,7 +134,7 @@ int main(int argc, char *argv[]){
         for(int x=1;x<config.size();x++){
             toGenerate.append(config.at(x));
         }
-        //TODO: call single generation here
+        //call single generation here
         gen.setLists(toGenerate, newLists);
         gen.start();
         QObject::connect(&gen, SIGNAL(finished()), &a, SLOT(quit()));
