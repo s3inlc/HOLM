@@ -275,13 +275,18 @@ void Generator::getIdentifiers(){
 void Generator::updateDownloadProgress(qint64 prog, qint64 tot){
     int percent = (int)(prog*100/tot);
     if(Logger::getLevel() == NORMAL){
-        if(percent == lastPercent){
+        if(percent == lastPercent || tot == -1){
             return;
         }
         Logger::log("Progress: " + QString::number(percent) + "%", NORMAL);
     }
     else{
-        Logger::log("Progress: " + QString::number(prog) + "/" + QString::number(tot) + " (" + QString::number(percent) + "%)", INCREASED);
+        if(tot == -1){
+            Logger::log("Progress: " + QString::number(prog) + " Bytes", INCREASED);
+        }
+        else{
+            Logger::log("Progress: " + QString::number(prog) + "/" + QString::number(tot) + " (" + QString::number(percent) + "%)", INCREASED);
+        }
     }
 }
 
