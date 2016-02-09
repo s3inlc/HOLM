@@ -78,12 +78,14 @@ void Generator::createList(QString name, bool newLists){
     //load all identifiers into RAM
     generating = true;
     QMap<QString,bool> data;
+    Logger::log("Load all identifiers...", NORMAL);
     for(int x=0;x<currentIdentifiers.size();x++){
         //get identifier file if existing
         QString identifierPath = DATA + QString("/") + currentIdentifiers.at(x) + ".txt";
         QFile id(identifierPath);
         if(!id.exists()){
             //if it doesn't exist, we will ignore it
+            Logger::log("Ignore " + currentIdentifiers.at(x) + " because it doesn't exist!", INCREASED);
             continue;
         }
         QString idData = fileGetContents(identifierPath);
@@ -96,9 +98,29 @@ void Generator::createList(QString name, bool newLists){
             }
             else{
                 //unsalted hash
+                hash = list.at(y).mid(1);
+                if(hash.length() != name.toInt()){
+                    continue;
+                }
+                if(list.at(y).at(0) == '+'){
+                    act = true;
+                }
+                else{
+                    act = false;
+                }
+                if(!data.keys().contains(hash)){
+                    data.insert(hash, act);
+                }
+                else if(data.value(hash) && !act){
+                    data.remove(hash);
+                }
+                else if(!data.value(hash) && act){
+                    data.remove(hash);
+                }
             }
         }
     }
+    Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
 
     //open list and file path to write to
 
@@ -143,7 +165,6 @@ void Generator::downloadRead(){
     else if(downloadReply->isFinished()){
         Logger::log("Finished download!", NORMAL);
         downloading = false;
-        delete downloadReply;
         return;
     }
     else if(downloadReply->bytesAvailable() <= 0){
@@ -171,7 +192,8 @@ void Generator::checkChecksum(QString name, bool newLists){
     Logger::log("Check checksum...", INCREASED);
     QString hashCode = byteToStr(fileChecksum(path, QCryptographicHash::Sha1));
     cout << hashCode.toStdString() << endl;
-    QUrl url(QString(API) + "?holm=sumcheck&sum=" + hashCode);
+    ApiManager apiManager;
+    QUrl url(QString(API) + "?holm=sumcheck&key=" + apiManager.getKey() + "&sum=" + hashCode);
     Logger::log("CALL: " + url.toString(), DEBUG);
     QNetworkReply *reply = manager.get(QNetworkRequest(url));
     eventLoop.exec(); //waiting..
@@ -183,6 +205,7 @@ void Generator::checkChecksum(QString name, bool newLists){
             //file needs to be downloaded!
             Logger::log("Current list is not identified, need to load again!", INCREASED);
             downloading = true;
+            emit triggerDownloadFile(name, newLists);
             while(downloading){
                 usleep(100); //waiting for the download
             }
@@ -210,9 +233,14 @@ void Generator::getIdentifiers(){
     checking = true;
     QNetworkAccessManager manager(this);
     QEventLoop eventLoop;
+    ApiManager apiManager;
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     for(int x=0;x<currentIdentifiers.size();x++){
-        QUrl url(QString(API) + "?holm=get&key=" + currentIdentifiers.at(x));
+        QFile file(DATA + QString("/") + currentIdentifiers.at(x) + ".txt");
+        if(file.exists()){
+            continue;
+        }
+        QUrl url(QString(API) + "?holm=get&key=" + apiManager.getKey() + "&id=" + currentIdentifiers.at(x));
         Logger::log("Loading identifier " + currentIdentifiers.at(x) + "!", INCREASED);
         Logger::log("CALL: " + url.toString(), DEBUG);
         QNetworkReply *reply = manager.get(QNetworkRequest(url));
@@ -226,7 +254,12 @@ void Generator::getIdentifiers(){
             }
             else{
                 Logger::log("Received identifier '" + currentIdentifiers.at(x) + "'", DEBUG);
-                //TODO: save identifier here
+                //save identifier here
+                if(file.open(QIODevice::WriteOnly)){
+                    QTextStream stream(&file);
+                    stream << data;
+                }
+                file.close();
             }
         }
         else{
@@ -235,6 +268,7 @@ void Generator::getIdentifiers(){
         }
         delete reply;
     }
+    Logger::log("All required identifiers are loaded and/or saved!", NORMAL);
     checking = false;
 }
 
@@ -270,7 +304,7 @@ QString Generator::fileGetContents(QString path){
     QFile f(path);
     if(!f.open(QFile::ReadOnly)){
         Logger::log("Failed to open file: '" + path + "!", INCREASED);
-        return;
+        return "";
     }
     QTextStream in(&f);
     return in.readAll();
