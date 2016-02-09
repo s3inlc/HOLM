@@ -3,13 +3,14 @@
 ApiManager::ApiManager(QObject *parent) : QObject(parent){
     isValid = false;
     Logger::log("Check for available API key...", DEBUG);
-    QFile f(API_KEY_PATH);
+    QFile f(DATA + QString("/") + API_KEY_PATH);
     if(!f.open(QFile::ReadOnly | QFile::Text)){
         Logger::log("Failed to open an API key file!", INCREASED);
         return;
     }
     QTextStream in(&f);
-    setKey(in.readAll());
+    apiKey = in.readAll();
+    isValid = true;
 }
 
 bool ApiManager::validApiAvailable(){
@@ -49,6 +50,15 @@ void ApiManager::setKey(QString k){
         //failure
         Logger::log("API request failed with: " + reply->errorString(), NORMAL);
         isValid = false;
+    }
+    if(isValid){
+        QFile file(DATA + QString("/") + API_KEY_PATH);
+        if(file.open(QIODevice::ReadOnly)){
+            QTextStream stream(&file);
+            stream << k;
+        }
+        file.close();
+        apiKey = k;
     }
     delete reply;
 }
