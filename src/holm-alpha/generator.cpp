@@ -78,6 +78,7 @@ void Generator::createList(QString name, bool newLists){
     //load all identifiers into RAM
     generating = true;
     QMap<QString,bool> data;
+    Logger::log("Start list creation for " + name + "...", INCREASED);
     Logger::log("Load all identifiers...", NORMAL);
     for(int x=0;x<currentIdentifiers.size();x++){
         //get identifier file if existing
@@ -122,11 +123,10 @@ void Generator::createList(QString name, bool newLists){
     }
     Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
 
-    //open list and file path to write to
+    //TODO: open list and file path to write to
 
-    //go trough list and remove/add hashes
+    //TODO: go trough list and remove/add hashes
 
-    //end
     generating = false;
 }
 
