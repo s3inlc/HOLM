@@ -59,6 +59,11 @@ void Generator::run(){
             while(downloading){
                 usleep(100); //waiting for the download
             }
+            emit triggerCheckChecksum(lists.at(x), newLists);
+            checking = true;
+            while(checking){
+                usleep(100); //waiting for the check
+            }
             emit triggerGetIdentifiers();
             checking = true;
             while(checking){
@@ -70,7 +75,9 @@ void Generator::run(){
                 usleep(100); //waiting for the generation
             }
         }
+        Logger::log("Finished " + lists.at(x) + "!", NORMAL);
     }
+    Logger::log("Finished all list generations!", NORMAL);
     delete downloadManager;
 }
 
@@ -123,9 +130,62 @@ void Generator::createList(QString name, bool newLists){
     }
     Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
 
-    //TODO: open list and file path to write to
+    //open list and file path to write to
+    QString outputPath = name + "_";
+    QString inputPath = DATA + QString("/") + name + "_";
+    if(newLists){
+        outputPath += "new.txt";
+        inputPath += "new.txt";
+    }
+    else{
+        outputPath += "old.txt";
+        inputPath += "old.txt";
+    }
+    QFile output(outputPath);
+    QFile input(inputPath);
+    if(!output.open(QIODevice::WriteOnly)){
+        Logger::log("Failed to open output file!", NORMAL);
+        generating = false;
+        return;
+    }
+    if(!input.open(QIODevice::ReadOnly)){
+        Logger::log("Failed to open input list file!", NORMAL);
+        generating = false;
+        return;
+    }
 
-    //TODO: go trough list and remove/add hashes
+    int delCount = 0;
+    int addCount = 0;
+
+    //go trough list and remove/add hashes
+    while(!input.atEnd()){
+        QString line = input.readLine().replace("\n", "");
+        if(line.length() == 0){
+            continue;
+        }
+        if(data.contains(line) && !data.value(line)){
+            delCount++;
+            continue;
+        }
+        else if(data.contains(line)){
+            data.remove(line);
+        }
+        output.write(line.toUtf8() + "\n");
+    }
+
+    input.close();
+
+    //add hashes which are not handled currently
+    for(int x=0;x<data.size();x++){
+        if(!data.values().at(x)){
+            continue;
+        }
+        addCount++;
+        output.write(data.keys().at(x).toUtf8() + "\n");
+    }
+    output.close();
+
+    Logger::log("Added " + QString::number(addCount) + " hashes and removed " + QString::number(delCount) + " hashes from " + name, NORMAL);
 
     generating = false;
 }
