@@ -78,7 +78,6 @@ void Generator::run(){
         Logger::log("Finished " + lists.at(x) + "!", NORMAL);
     }
     Logger::log("Finished all list generations!", NORMAL);
-    delete downloadManager;
 }
 
 void Generator::createList(QString name, bool newLists){
@@ -251,7 +250,6 @@ void Generator::checkChecksum(QString name, bool newLists){
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     Logger::log("Check checksum...", INCREASED);
     QString hashCode = byteToStr(fileChecksum(path, QCryptographicHash::Sha1));
-    cout << hashCode.toStdString() << endl;
     ApiManager apiManager;
     QUrl url(QString(API) + "?holm=sumcheck&key=" + apiManager.getKey() + "&sum=" + hashCode);
     Logger::log("CALL: " + url.toString(), DEBUG);
