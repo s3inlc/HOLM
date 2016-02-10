@@ -7,6 +7,10 @@ HOLM-alpha currently in development...
 
 You can simply generate updated lists by calling:
 ```
-./holm-alpha 40 16 32
+./holm-alpha gen 40 16 32
 ```
-to generate the 40 hex new left list.
+to generate the 40, 16 and 32 hex new left list.
+
+To get the old lists, you just have to add the ```--old``` parameter. 
+
+In case of errors, to increase the verbosity level, you can use ```-v```. ```-v 1``` for increased logging level and ```-v 2``` for the highest logging level.
