@@ -53,7 +53,7 @@ void ApiManager::setKey(QString k){
     }
     if(isValid){
         QFile file(DATA + QString("/") + API_KEY_PATH);
-        if(file.open(QIODevice::ReadOnly)){
+        if(file.open(QIODevice::WriteOnly)){
             QTextStream stream(&file);
             stream << k;
         }
