@@ -336,6 +336,7 @@ void Generator::updateDownloadProgress(qint64 prog, qint64 tot){
         if(percent == lastPercent || tot == -1){
             return;
         }
+        lastPercent = percent;
         Logger::log("Progress: " + QString::number(percent) + "%", NORMAL);
     }
     else{
