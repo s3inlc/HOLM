@@ -12,7 +12,12 @@
 
 #define API_KEY_PATH "api.key"
 
+#ifdef WIN32
+#include <stdint.h>
 #define UINT8 uint8_t
+#else
+#define UINT8 uint8_t
+#endif
 
 enum RunType {
     NO_TYPE,
