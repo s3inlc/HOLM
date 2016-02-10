@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
     //check if folders exist (tasks, data)
     QDir taskDir(TASKS);
     if(!taskDir.exists()){
-#ifdef WIN_32
+#ifdef WIN32
         mkdir(TASKS);
 #else
         mkdir(TASKS, 0777);
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
     }
     QDir dataDir(DATA);
     if(!dataDir.exists()){
-#ifdef WIN_32
+#ifdef WIN32
         mkdir(DATA);
 #else
         mkdir(DATA, 0777);
