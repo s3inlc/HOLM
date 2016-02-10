@@ -267,11 +267,11 @@ void Generator::checkChecksum(QString name, bool newLists){
             while(downloading){
                 usleep(100); //waiting for the download
             }
-            emit triggerCheckChecksum(name, newLists); // I know this is bad at the moment. In case of bugs it can cause looping
+            /*emit triggerCheckChecksum(name, newLists); // I know this is bad at the moment. In case of bugs it can cause looping
             checking = true;
             while(checking){
                 usleep(100); //waiting for the check
-            }
+            }*/
         }
         else{
             //we get the identifiers
