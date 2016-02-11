@@ -45,6 +45,24 @@ int main(int argc, char *argv[]){
     cout << "HOLM-alpha starting..." << endl;
     QCoreApplication a(argc, argv);
 
+    //check if folders exist (tasks, data)
+    QDir taskDir(TASKS);
+    if(!taskDir.exists()){
+#ifdef WIN32
+        mkdir(TASKS);
+#else
+        mkdir(TASKS, 0777);
+#endif
+    }
+    QDir dataDir(DATA);
+    if(!dataDir.exists()){
+#ifdef WIN32
+        mkdir(DATA);
+#else
+        mkdir(DATA, 0777);
+#endif
+    }
+
     //check here if SSL is available, if not, abort
     if(!QSslSocket::supportsSsl()){
         cout << "HTTPS libs are not available, required to run!" << endl;
@@ -94,24 +112,6 @@ int main(int argc, char *argv[]){
         if(in.length() > 0){
             apiManager.setKey(in.c_str());
         }
-    }
-
-    //check if folders exist (tasks, data)
-    QDir taskDir(TASKS);
-    if(!taskDir.exists()){
-#ifdef WIN32
-        mkdir(TASKS);
-#else
-        mkdir(TASKS, 0777);
-#endif
-    }
-    QDir dataDir(DATA);
-    if(!dataDir.exists()){
-#ifdef WIN32
-        mkdir(DATA);
-#else
-        mkdir(DATA, 0777);
-#endif
     }
 
     Generator gen;
