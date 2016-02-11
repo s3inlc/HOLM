@@ -16,6 +16,7 @@
 #include <stdint.h>
 #define UINT8 uint8_t
 #else
+#include <stdint.h>
 #define UINT8 uint8_t
 #endif
 
