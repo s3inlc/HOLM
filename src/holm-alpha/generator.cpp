@@ -102,6 +102,25 @@ void Generator::createList(QString name, bool newLists){
             bool act;
             if(list.at(y).contains(":")){
                 //salted list
+                hash = list.at(y).mid(1);
+                if(list.at(y).at(0) == '+'){
+                    act = true;
+                }
+                else{
+                    act = false;
+                }
+                QStringList split = hash.split(":");
+                QByteArray conv = QByteArray::fromHex(split.at(1).toUtf8());
+                hash = split.at(0) + ":" + conv.data();
+                if(!data.keys().contains(hash)){
+                    data.insert(hash, act);
+                }
+                else if(data.value(hash) && !act){
+                    data.remove(hash);
+                }
+                else if(!data.value(hash) && act){
+                    data.remove(hash);
+                }
             }
             else{
                 //unsalted hash
