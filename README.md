@@ -1,5 +1,6 @@
 # HOLM (Hashes.Org Left Manager)
 
+[![Travis build status](https://travis-ci.org/s3inlc/holm.png?branch=master)](https://travis-ci.org/s3inlc/holm)
 
 HOLM-alpha currently in development...
 
