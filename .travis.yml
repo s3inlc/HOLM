@@ -9,5 +9,5 @@ install:
 
 script:
   - qmake -project
-  - qmake s3inlc/holm/src/holm-alpha.pro
+  - qmake s3inlc/holm/src/holm-alpha/holm-alpha.pro
   - make
