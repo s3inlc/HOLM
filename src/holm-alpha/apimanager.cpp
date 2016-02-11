@@ -56,8 +56,11 @@ void ApiManager::setKey(QString k){
         if(file.open(QIODevice::WriteOnly)){
             QTextStream stream(&file);
             stream << k;
+            file.close();
         }
-        file.close();
+        else{
+            Logger::log("Failed to save API key file!", NORMAL);
+        }
         apiKey = k;
     }
     delete reply;
