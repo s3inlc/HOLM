@@ -34,6 +34,11 @@ enum BinaryType {
     MDXFIND
 };
 
+struct DataSet {
+    bool isNew;
+    QString salt;
+};
+
 struct Configuration {
     BinaryType application;
     QString binaryPath;

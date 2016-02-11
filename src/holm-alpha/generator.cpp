@@ -83,7 +83,7 @@ void Generator::run(){
 void Generator::createList(QString name, bool newLists){
     //load all identifiers into RAM
     generating = true;
-    QMap<QString,bool> data;
+    QMap<QString,DataSet> data;
     Logger::log("Start list creation for " + name + "...", INCREASED);
     Logger::log("Load all identifiers...", NORMAL);
     for(int x=0;x<currentIdentifiers.size();x++){
@@ -97,6 +97,7 @@ void Generator::createList(QString name, bool newLists){
         }
         QString idData = fileGetContents(identifierPath);
         QStringList list = idData.replace("\r\n", "\n").split("\n");
+        Logger::log(currentIdentifiers.at(x).toStdString(), INCREASED);
         for(int y=0;y<list.size();y++){
             QString hash;
             bool act;
@@ -111,14 +112,17 @@ void Generator::createList(QString name, bool newLists){
                 }
                 QStringList split = hash.split(":");
                 QByteArray conv = QByteArray::fromHex(split.at(1).toUtf8());
-                hash = split.at(0) + ":" + conv.data();
+                hash = split.at(0);
+                DataSet s;
+                s.isNew = act;
+                s.isNew = conv.data();
                 if(!data.keys().contains(hash)){
-                    data.insert(hash, act);
+                    data.insert(hash, s);
                 }
-                else if(data.value(hash) && !act){
+                else if(data.value(hash).isNew && !act){
                     data.remove(hash);
                 }
-                else if(!data.value(hash) && act){
+                else if(!data.value(hash).isNew && act){
                     data.remove(hash);
                 }
             }
@@ -134,13 +138,16 @@ void Generator::createList(QString name, bool newLists){
                 else{
                     act = false;
                 }
+                DataSet s;
+                s.isNew = act;
+                s.salt = "";
                 if(!data.keys().contains(hash)){
-                    data.insert(hash, act);
+                    data.insert(hash, s);
                 }
-                else if(data.value(hash) && !act){
+                else if(data.value(hash).isNew && !act){
                     data.remove(hash);
                 }
-                else if(!data.value(hash) && act){
+                else if(!data.value(hash).isNew && act){
                     data.remove(hash);
                 }
             }
@@ -181,7 +188,9 @@ void Generator::createList(QString name, bool newLists){
         if(line.length() == 0){
             continue;
         }
-        if(data.contains(line) && !data.value(line)){
+        QStringList split = line.split(":");
+        QString hash = split.at(0);
+        if(data.contains(hash) && !data.value(line).isNew){
             delCount++;
             continue;
         }
@@ -195,11 +204,16 @@ void Generator::createList(QString name, bool newLists){
 
     //add hashes which are not handled currently
     for(int x=0;x<data.size();x++){
-        if(!data.values().at(x)){
+        if(!data.values().at(x).isNew){
             continue;
         }
         addCount++;
-        output.write(data.keys().at(x).toUtf8() + "\n");
+        if(data.value(data.keys().at(x)).salt.length() > 0){
+            output.write(data.keys().at(x).toUtf8() + ":" + data.value(data.keys().at(x)).salt.toUtf8() + "\n");
+        }
+        else{
+            output.write(data.keys().at(x).toUtf8() + "\n");
+        }
     }
     output.close();
 
@@ -337,6 +351,7 @@ void Generator::getIdentifiers(){
                     stream << data;
                 }
                 file.close();
+                Logger::log(QString::number(currentIdentifiers.size() - x - 1) + " identifiers remaining to load...", NORMAL);
             }
         }
         else{
