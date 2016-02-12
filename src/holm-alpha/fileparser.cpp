@@ -1,3 +1,8 @@
+/*
+* Project created by QtCreator 2016-01-28T16:04:57
+* Copyright 2016 by Sein Coray
+*/
+
 #include "fileparser.h"
 
 FileParser::FileParser(QObject *parent) : QObject(parent){
