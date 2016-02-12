@@ -97,7 +97,7 @@ void Generator::createList(QString name, bool newLists){
         }
         QString idData = fileGetContents(identifierPath);
         QStringList list = idData.replace("\r\n", "\n").split("\n");
-        Logger::log(currentIdentifiers.at(x).toStdString(), INCREASED);
+        Logger::log(currentIdentifiers.at(x), INCREASED);
         for(int y=0;y<list.size();y++){
             QString hash;
             bool act;
