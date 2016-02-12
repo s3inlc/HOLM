@@ -27,11 +27,15 @@ SOURCES += main.cpp \
     taskparser.cpp \
     apimanager.cpp \
     logger.cpp \
-    generator.cpp
+    generator.cpp \
+    executor.cpp \
+    fileparser.cpp
 
 HEADERS += \
     defines.h \
     taskparser.h \
     apimanager.h \
     logger.h \
-    generator.h
+    generator.h \
+    executor.h \
+    fileparser.h
