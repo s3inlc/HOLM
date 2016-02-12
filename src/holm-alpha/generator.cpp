@@ -115,7 +115,7 @@ void Generator::createList(QString name, bool newLists){
                 hash = split.at(0);
                 DataSet s;
                 s.isNew = act;
-                s.isNew = conv.data();
+                s.salt = conv.data();
                 if(!data.keys().contains(hash)){
                     data.insert(hash, s);
                 }
