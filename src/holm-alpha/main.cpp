@@ -10,6 +10,8 @@
 #include "taskparser.h"
 #include "apimanager.h"
 #include "generator.h"
+#include "executor.h"
+#include "fileparser.h"
 using namespace std;
 
 void showHelp(){
@@ -115,6 +117,8 @@ int main(int argc, char *argv[]){
     }
 
     Generator gen;
+    FileParser parser;
+    Executor exec;
 
     //parse arguments
     if(config.size() < 1){
@@ -147,7 +151,14 @@ int main(int argc, char *argv[]){
             showHelp();
             return 0;
         }
-        //TODO: call task execution here with config.at(1)
+        //call task execution here with config.at(1)
+        parser.parseFile(config.at(1));
+        QStringList set;
+        set.append(parser.getList());
+        gen.setLists(set, parser.isNewList());
+        exec.setCallString(parser.getCallString());
+        QObject::connect(&gen, SIGNAL(finished()), &exec, SLOT(start()));
+        QObject::connect(&exec, SIGNAL(finished()), &a, SLOT(quit()));
     }
     else if(config.at(0).compare("multi") == 0){
         //execute all tasks within the task directory
