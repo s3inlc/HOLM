@@ -124,6 +124,7 @@ int main(int argc, char *argv[]){
     Generator gen;
     FileParser parser;
     Executor exec;
+    //Uploader uploader;
 
     //parse arguments
     if(config.size() < 1){
@@ -158,12 +159,25 @@ int main(int argc, char *argv[]){
         }
         //call task execution here with config.at(1)
         parser.parseFile(config.at(1));
+        if(!parser.isValid()){
+            Logger::log("Abort task execution due to error!", NORMAL);
+            return -1;
+        }
         QStringList set;
         set.append(parser.getList());
         gen.setLists(set, parser.isNewList());
         exec.setCallString(parser.getCallString());
         QObject::connect(&gen, SIGNAL(finished()), &exec, SLOT(start()));
-        QObject::connect(&exec, SIGNAL(finished()), &a, SLOT(quit()));
+        if(!looping){
+            QObject::connect(&exec, SIGNAL(finished()), &a, SLOT(quit()));
+        }
+        else{
+            //when looping, just start again with generation
+            QObject::connect(&exec, SIGNAL(finished()), &gen, SLOT(start()));
+        }
+        //TODO: if autoupload is set, call uploader after run finished
+        Logger::log("Start single task...", NORMAL);
+        gen.start();
     }
     else if(config.at(0).compare("multi") == 0){
         //execute all tasks within the task directory
