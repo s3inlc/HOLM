@@ -217,7 +217,20 @@ int main(int argc, char *argv[]){
         QStringList tasks;
         if(config.size() > 1){
             for(int x=1;x<config.size();x++){
-                tasks.append(config.at(x));
+                QFileInfo info(config.at(x));
+                if(info.isDir()){
+                    QDir recoredDir(config.at(x));
+                    QStringList filter;
+                    filter.append("*.ini");
+                    QStringList list = recoredDir.entryList(filter);
+                    for(int y=0;y<list.size();y++){
+                        //tasks.append();
+                        tasks.append(config.at(x) + "/" + list.at(y));
+                    }
+                }
+                else{
+                    tasks.append(config.at(x));
+                }
             }
         }
         else{
@@ -227,7 +240,11 @@ int main(int argc, char *argv[]){
             filter.append("*.ini");
             tasks = recoredDir.entryList(filter);
         }
+        tasks.removeDuplicates();
         Logger::log("Loaded " + QString::number(tasks.size()) + " tasks.", NORMAL);
+        for(int x=0;x<tasks.size();x++){
+            Logger::log("Task file: " + tasks.at(x), DEBUG);
+        }
         //call multiple task execution
         if(looping){
             QObject::connect(&multi, SIGNAL(allTasksDone()), &multi, SLOT(nextTask()));
