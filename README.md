@@ -28,6 +28,8 @@ holm-alpha single examples/simple.ini
 ```
 Additionally you can set the following switches:
 ```
---loop (HOLM will start with generating a new list again and then running the task again, as long as you don't press CTRL^C)
---upload (This will turn on the automatic upload of the found hashes to Hashes.org with your API keys related user account)
+--loop        (HOLM will start with generating a new list again and then running the task again, 
+              as long as you don't press CTRL^C)
+--upload      (This will turn on the automatic upload of the found hashes to Hashes.org with your 
+              API keys related user account)
 ```
