@@ -39,7 +39,7 @@ TaskParser::TaskParser(QString path) : QObject(){
         lineSplit.removeAt(0);
         QString value = lineSplit.join("=");
         if(key.compare("hashcat") == 0){
-            config.application = HASHCAT;
+            config.application = OCLHASHCAT;
             config.binaryPath = value;
         }
         else if(key.compare("algorithm") == 0){
