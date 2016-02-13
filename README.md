@@ -4,6 +4,8 @@
 
 HOLM-alpha currently in development...
 
+You will be required to enter an API key from your Hashes.org account when running HOLM. It can be found on the settings page of your user account.
+
 ## Generating left lists
 
 You can simply generate updated lists by calling:
@@ -11,8 +13,6 @@ You can simply generate updated lists by calling:
 holm-alpha gen 40 16 32
 ```
 to generate the 40, 16 and 32 hex new left list.
-
-You will be required to enter an API key from your Hashes.org account. It can be found on the settings page of your user account.
 
 To get the old lists, you just have to add the ```--old``` parameter. 
 
