@@ -10,6 +10,7 @@
 #include <QSslSocket>
 #include <QDir>
 #include <sys/stat.h>
+#include <QDir>
 #include "defines.h"
 #include "logger.h"
 #include "taskparser.h"
@@ -210,16 +211,26 @@ int main(int argc, char *argv[]){
         }
         else{
             //scan task folder for files
+            QDir recoredDir(TASKS);
+            QStringList filter;
+            filter.append("*.ini");
+            tasks = recoredDir.entryList(filter);
         }
+        Logger::log("Loaded " + QString::number(tasks.size()) + " tasks.", NORMAL);
         //call multiple task execution
-        multi.setTasks(tasks, uploading);
         if(looping){
             QObject::connect(&multi, SIGNAL(allTasksDone()), &multi, SLOT(nextTask()));
         }
         else{
             QObject::connect(&multi, SIGNAL(allTasksDone()), &a, SLOT(quit()));
         }
-        multi.nextTask();
+        if(tasks.size() > 0){
+            multi.setTasks(tasks, uploading);
+            multi.nextTask();
+        }
+        else{
+            return 0;
+        }
     }
     else{
         showHelp();

@@ -25,6 +25,10 @@ void MultiTask::taskFinished(){
 }
 
 void MultiTask::nextTask(){
+    if(taskPos >= tasks.size()){
+        taskFinished();
+        return;
+    }
     parser.parseFile(tasks.at(taskPos));
     if(!parser.isValid()){
         Logger::log("Skip task execution due to error!", NORMAL);
