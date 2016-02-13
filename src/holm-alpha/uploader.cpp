@@ -18,10 +18,12 @@ void Uploader::doUpload(){
         QFile outputFile(output);
         if(!outputFile.exists()){
             Logger::log("Output file does not exist!", NORMAL);
+            emit finished();
             return;
         }
         else if(!outputFile.open(QIODevice::ReadOnly)){
             Logger::log("Failed to open output file!", NORMAL);
+            emit finished();
             return;
         }
         QTextStream in(&outputFile);
@@ -30,6 +32,7 @@ void Uploader::doUpload(){
         if(data.length() == 0){
             Logger::log("Output file is empty!", INCREASED);
             outputFile.remove();
+            emit finished();
             return;
         }
         if(config.list.toInt() != 0){
