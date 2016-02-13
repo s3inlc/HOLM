@@ -45,6 +45,11 @@ There are two ways to do this:
 
 ```--loop``` and ```--upload``` also work with multiple task files. Founds get uploaded after every task, and when looping is set, it will start from the beginning when all tasks are completed.
 
+If you give a directory as an argument for 'multi' all .ini files in this directory will be used as task files:
+```
+holm-alpha multi taskdir other_taskfile.ini
+```
+
 ## HOLM command line options
 
 ```
