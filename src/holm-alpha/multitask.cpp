@@ -17,6 +17,7 @@ void MultiTask::setTasks(QStringList t, bool up){
 void MultiTask::taskFinished(){
     taskPos++;
     if(taskPos >= tasks.size()){
+        taskPos = 0;
         emit allTasksDone();
         return;
     }

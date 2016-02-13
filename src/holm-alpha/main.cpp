@@ -213,7 +213,12 @@ int main(int argc, char *argv[]){
         }
         //call multiple task execution
         multi.setTasks(tasks, uploading);
-        QObject::connect(&multi, SIGNAL(allTasksDone()), &a, SLOT(quit()));
+        if(looping){
+            QObject::connect(&multi, SIGNAL(allTasksDone()), &multi, SLOT(nextTask()));
+        }
+        else{
+            QObject::connect(&multi, SIGNAL(allTasksDone()), &a, SLOT(quit()));
+        }
         multi.nextTask();
     }
     else{
