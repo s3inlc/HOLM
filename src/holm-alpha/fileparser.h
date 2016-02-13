@@ -23,6 +23,7 @@ public:
     QString getCallString();
     QString getList();
     QString getBinaryPath();
+    Configuration getConfiguration();
     bool isNewList();
     bool isValid();
 

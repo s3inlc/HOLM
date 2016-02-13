@@ -102,10 +102,10 @@ QString FileParser::getCallString(){
     }
     QFileInfo list(listPath);
     if(config.application == OCLHASHCAT){
-        return config.binaryPath + " -m " + config.algorithm + " -o runHashcat.out '" + list.absoluteFilePath() + "' " + config.call;
+        return config.binaryPath + " -m " + config.algorithm + " -o runHashcat_" + config.algorithm + ".out '" + list.absoluteFilePath() + "' " + config.call;
     }
     else if(config.application == MDXFIND){
-        return config.binaryPath + " -h '" + config.algorithm + "' -f '" + list.absoluteFilePath() + "' " + config.call + " >> runHashcat.out";
+        return config.binaryPath + " -h '" + config.algorithm + "' -f '" + list.absoluteFilePath() + "' " + config.call + " >> runMDX.out";
     }
     else{
         return "";
@@ -118,6 +118,10 @@ QString FileParser::getList(){
 
 QString FileParser::getBinaryPath(){
     return config.binaryPath;
+}
+
+Configuration FileParser::getConfiguration(){
+    return config;
 }
 
 bool FileParser::isNewList(){
