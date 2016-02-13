@@ -44,3 +44,22 @@ There are two ways to do this:
 * You put all the task files you want to run into the folder 'tasks' in the application directory and then just call ```holm-alpha multi``` without any additional argument.
 
 ```--loop``` and ```--upload``` also work with multiple task files. Founds get uploaded after every task, and when looping is set, it will start from the beginning when all tasks are completed.
+
+## HOLM command line options
+
+```
+HOLM-alpha 1.1
+holm-alpha [gen|single|multi] <options> (<lists|tasks>)
+
+    gen     generate one or multiple lists from Hashes.org.
+            list names are provided with their names like '32', '40' or 'joomla'
+    single  execute a single task given by the task filename
+    multi   execute multiple task files, given as list of argument or all
+            files which are present in the 'tasks' folder
+
+  --loop    when finished, HOLM will start again from the beginning
+            works for 'single' and 'multi'
+  --upload  automatically upload found hashes to Hashes.org after a task run
+  --old     instead of generating the new left lists, the old left are generated
+   -v [lev] set the logging level (0 is normal, 2 highest)
+```
