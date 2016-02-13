@@ -7,6 +7,7 @@
 #define EXECUTOR_H
 
 #include <QThread>
+#include "logger.h"
 
 class Executor : public QThread{
     Q_OBJECT
@@ -21,6 +22,7 @@ public slots:
 
 private:
     void run();
+    QString callString;
 };
 
 #endif // EXECUTOR_H

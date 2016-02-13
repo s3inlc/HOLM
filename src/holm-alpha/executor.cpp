@@ -14,9 +14,11 @@ Executor::~Executor(){
 }
 
 void Executor::setCallString(QString call){
-    //TODO:
+    callString = call;
 }
 
 void Executor::run(){
-    //
+    Logger::log("Executing: " + callString, DEBUG);
+    system(callString.toStdString().c_str());
+    Logger::log("Hashcracking run is finished!", NORMAL);
 }
