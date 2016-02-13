@@ -35,7 +35,6 @@ enum RunType {
 enum BinaryType {
     EMPTY,
     OCLHASHCAT,
-    HASHCAT,
     MDXFIND
 };
 
@@ -49,9 +48,11 @@ struct Configuration {
     QString binaryPath;
     QString list;
     QString call;
-    int algorithm;
+    QString algorithm;
     bool newList;
 };
+
+bool isValidList(QString name);
 
 #endif // DEFINES
 
