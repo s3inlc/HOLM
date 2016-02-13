@@ -10,7 +10,7 @@
 
 #define API "https://hashes.org/api.php"
 #define DL_PATH "https://hashes.org/download.php"
-#define HOLM_VERSION "1.0.1"
+#define HOLM_VERSION "1.1"
 
 #define TASKS "tasks"
 #define DATA "data"

@@ -23,8 +23,19 @@
 using namespace std;
 
 void showHelp(){
-    //TODO: show help
+    //show help
     cout << "HOLM-alpha " << HOLM_VERSION << endl;
+    cout << "holm-alpha [gen|single|multi] <options> (<lists|tasks>)" << endl << endl;
+    cout << "    gen     generate one or multiple lists from Hashes.org." << endl;
+    cout << "            list names are provided with their names like '32', '40' or 'joomla'" << endl;
+    cout << "    single  execute a single task given by the task filename" << endl;
+    cout << "    multi   execute multiple task files, given as list of argument or all" << endl;
+    cout << "            files which are present in the 'tasks' folder" << endl << endl;
+    cout << "  --loop    when finished, HOLM will start again from the beginning" << endl;
+    cout << "            works for 'single' and 'multi'" << endl;
+    cout << "  --upload  automatically upload found hashes to Hashes.org after a task run" << endl;
+    cout << "  --old     instead of generating the new left lists, the old left are generated" << endl;
+    cout << "   -v [lev] set the logging level (0 is normal, 2 highest)" << endl << endl;
 }
 
 bool isValidList(QString name){
