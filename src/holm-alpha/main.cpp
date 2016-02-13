@@ -17,6 +17,7 @@
 #include "generator.h"
 #include "executor.h"
 #include "fileparser.h"
+#include "uploader.h"
 using namespace std;
 
 void showHelp(){
@@ -79,6 +80,7 @@ int main(int argc, char *argv[]){
     RunType task = NO_TYPE;
     bool looping = false;
     bool newLists = true;
+    bool uploading = false;
     int logLevel = 0; // 0 -> normal, 1 -> increased, 2 -> debug
     QList<QString> config;
     for(int x=1;x<argc;x++){
@@ -88,6 +90,9 @@ int main(int argc, char *argv[]){
         }
         else if(strcmp(argv[x], "--old") == 0){
             newLists = false;
+        }
+        else if(strcmp(argv[x], "--upload") == 0){
+            uploading = true;
         }
         else if(strcmp(argv[x], "-v") == 0){
             if(x + 1 >= argc){
@@ -124,7 +129,7 @@ int main(int argc, char *argv[]){
     Generator gen;
     FileParser parser;
     Executor exec;
-    //Uploader uploader;
+    Uploader uploader;
 
     //parse arguments
     if(config.size() < 1){
@@ -169,11 +174,25 @@ int main(int argc, char *argv[]){
         exec.setCallString(parser.getCallString());
         QObject::connect(&gen, SIGNAL(finished()), &exec, SLOT(start()));
         if(!looping){
-            QObject::connect(&exec, SIGNAL(finished()), &a, SLOT(quit()));
+            if(uploading){
+                uploader.setConfiguration(parser.getConfiguration());
+                QObject::connect(&exec, SIGNAL(finished()), &uploader, SLOT(doUpload()));
+                QObject::connect(&uploader, SIGNAL(finished()), &a, SLOT(quit()));
+            }
+            else{
+                QObject::connect(&exec, SIGNAL(finished()), &a, SLOT(quit()));
+            }
         }
         else{
             //when looping, just start again with generation
-            QObject::connect(&exec, SIGNAL(finished()), &gen, SLOT(start()));
+            if(uploading){
+                uploader.setConfiguration(parser.getConfiguration());
+                QObject::connect(&exec, SIGNAL(finished()), &uploader, SLOT(doUpload()));
+                QObject::connect(&uploader, SIGNAL(finished()), &gen, SLOT(start()));
+            }
+            else{
+                QObject::connect(&exec, SIGNAL(finished()), &gen, SLOT(start()));
+            }
         }
         //TODO: if autoupload is set, call uploader after run finished
         Logger::log("Start single task...", NORMAL);
