@@ -12,6 +12,8 @@ You can simply generate updated lists by calling:
 ```
 to generate the 40, 16 and 32 hex new left list.
 
+You will be required to enter an API key from your Hashes.org account. It can be found on the settings page of your user account.
+
 To get the old lists, you just have to add the ```--old``` parameter. 
 
 In case of errors, to increase the verbosity level, you can use ```-v```. ```-v 1``` for increased logging level and ```-v 2``` for the highest logging level.
