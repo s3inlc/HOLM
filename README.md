@@ -35,3 +35,12 @@ Additionally you can set the following switches:
 --upload      (This will turn on the automatic upload of the found hashes to Hashes.org with your 
               API keys related user account)
 ```
+
+## Execute multiple automatic tasks with one run
+
+You can set HOLM to execute more than one task each one after the other, for example to do some various dictionaries or rules with different settings. 
+There are two ways to do this:
+* You give all the tasks you want to execute as arguments when calling HOLM: ```holm-alpha multi task1.ini task2.ini ....```
+* You put all the task files you want to run into the folder 'tasks' in the application directory and then just call ```holm-alpha multi``` without any additional argument.
+
+```--loop``` and ```--upload``` also work with multiple task files. Founds get uploaded after every task, and when looping is set, it will start from the beginning when all tasks are completed.
