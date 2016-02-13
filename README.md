@@ -24,7 +24,7 @@ You can configure HOLM to automatically call oclHashcat/Hashcat after the list g
 
 To set a task configuration you need to create a task file (like in examples folder) and then call HOLM with it:
 ```
-holm-alpha single examples/simple.ini
+holm-alpha single examples/minimalist.ini
 ```
 Additionally you can set the following switches:
 ```
