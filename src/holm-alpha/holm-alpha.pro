@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     logger.cpp \
     generator.cpp \
     executor.cpp \
-    fileparser.cpp
+    fileparser.cpp \
+    uploader.cpp
 
 HEADERS += \
     defines.h \
@@ -38,4 +39,5 @@ HEADERS += \
     logger.h \
     generator.h \
     executor.h \
-    fileparser.h
+    fileparser.h \
+    uploader.h
