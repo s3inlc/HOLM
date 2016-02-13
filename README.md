@@ -6,6 +6,8 @@ HOLM-alpha currently in development...
 
 You will be required to enter an API key from your Hashes.org account when running HOLM. It can be found on the settings page of your user account.
 
+Read [here](src/Build.md) about building HOLM.
+
 ## Generating left lists
 
 You can simply generate updated lists by calling:
