@@ -24,7 +24,10 @@ void FileParser::parseFile(QString task){
     QTextStream in(&file);
     QStringList content = in.readAll().replace("\r\n", "\n").split("\n");
     for(int x=0;x<content.size();x++){
-        if(content.at(x).at(0) == '#'){
+        if(content.at(x).length() == 0){
+            continue;
+        }
+        else if(content.at(x).at(0) == '#'){
             continue; //ignore comment lines
         }
         QStringList kval = content.at(x).split("=");
