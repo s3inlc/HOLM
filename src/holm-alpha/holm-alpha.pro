@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     generator.cpp \
     executor.cpp \
     fileparser.cpp \
-    uploader.cpp
+    uploader.cpp \
+    multitask.cpp
 
 HEADERS += \
     defines.h \
@@ -40,4 +41,5 @@ HEADERS += \
     generator.h \
     executor.h \
     fileparser.h \
-    uploader.h
+    uploader.h \
+    multitask.h

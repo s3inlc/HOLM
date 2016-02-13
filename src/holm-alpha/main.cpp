@@ -18,6 +18,7 @@
 #include "executor.h"
 #include "fileparser.h"
 #include "uploader.h"
+#include "multitask.h"
 using namespace std;
 
 void showHelp(){
@@ -130,6 +131,7 @@ int main(int argc, char *argv[]){
     FileParser parser;
     Executor exec;
     Uploader uploader;
+    MultiTask multi;
 
     //parse arguments
     if(config.size() < 1){
@@ -194,14 +196,25 @@ int main(int argc, char *argv[]){
                 QObject::connect(&exec, SIGNAL(finished()), &gen, SLOT(start()));
             }
         }
-        //TODO: if autoupload is set, call uploader after run finished
         Logger::log("Start single task...", NORMAL);
         gen.start();
     }
     else if(config.at(0).compare("multi") == 0){
         //execute all tasks within the task directory
         task = MULTI_TASK;
-        //TODO: call multiple task execution
+        QStringList tasks;
+        if(config.size() > 1){
+            for(int x=1;x<config.size();x++){
+                tasks.append(config.at(x));
+            }
+        }
+        else{
+            //scan task folder for files
+        }
+        //call multiple task execution
+        multi.setTasks(tasks, uploading);
+        QObject::connect(&multi, SIGNAL(allTasksDone()), &a, SLOT(quit()));
+        multi.nextTask();
     }
     else{
         showHelp();
