@@ -59,7 +59,7 @@ void Uploader::doUpload(){
         Logger::log("CALL: " + url.toString(), DEBUG);
         QUrlQuery callData;
         callData.addQueryItem("algorithm", config.algorithm);
-        callData.addQueryItem("data", data);
+        callData.addQueryItem("data", Generator::byteToStr(data.toUtf8()));
         QNetworkRequest req = QNetworkRequest(url);
         req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
         QNetworkReply *reply = manager->post(req, callData.toString(QUrl::FullyEncoded).toUtf8());

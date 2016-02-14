@@ -12,6 +12,7 @@
 #include "apimanager.h"
 #include "logger.h"
 #include "defines.h"
+#include "generator.h"
 
 class Uploader : public QObject{
     Q_OBJECT
