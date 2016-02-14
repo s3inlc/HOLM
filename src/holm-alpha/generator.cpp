@@ -59,11 +59,12 @@ void Generator::run(){
                 msleep(100); //wait for loading the identifiers
             }
             if(!notGenerate){
-                emit triggerCreateList(lists.at(x), newLists);
+                /*emit triggerCreateList(lists.at(x), newLists);
                 generating = true;
                 while(generating){
                     msleep(100); //waiting for the generation
-                }
+                }*/
+                createList(lists.at(x), newLists);
             }
         }
         else{
