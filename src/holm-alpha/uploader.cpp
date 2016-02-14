@@ -66,7 +66,8 @@ void Uploader::doUpload(){
             data = reply->readAll();
             if(data.compare("OK") == 0){
                 Logger::log("Uploaded successfully!", NORMAL);
-                outputFile.remove();
+                outputFile.rename(output + ".uploaded");
+                //outputFile.remove(); only renaming for debugging purposes
             }
             else{
                 Logger::log("Upload failed: " + data, NORMAL);
