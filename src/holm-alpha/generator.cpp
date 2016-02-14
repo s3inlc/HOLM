@@ -239,12 +239,13 @@ void Generator::createList(QString name, bool newLists){
     start = QDateTime::currentMSecsSinceEpoch();
 
     //add hashes which are not handled currently
-    for(int x=0;x<data.size();x++){
-        if(!data.values().at(x)){
+    QStringList values = data.keys();
+    for(int x=0;x<values.size();x++){
+        if(!data.value(values.at(x))){
             continue;
         }
         addCount++;
-        output.write(data.keys().at(x).toUtf8() + "\n");
+        output.write(values.at(x).toUtf8() + "\n");
     }
     output.close();
 
