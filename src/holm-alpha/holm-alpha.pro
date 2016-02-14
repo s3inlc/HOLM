@@ -18,10 +18,10 @@ CONFIG += static
 TEMPLATE = app
 
 # Uncomment this for compiling with windows
-# LIBS += -LC:\OpenSSL-Win32\lib -lssleay32 -llibeay32
+LIBS += -LC:\OpenSSL-Win32\lib -lssleay32 -llibeay32
 
 # Uncomment this for compiling statically with windows
-# LIBS += -static -static-libgcc -static-libstdc++ -lpthread
+LIBS += -static -static-libgcc -static-libstdc++ -lpthread
 
 SOURCES += main.cpp \
     taskparser.cpp \
