@@ -56,15 +56,17 @@ holm-alpha multi taskdir other_taskfile.ini
 HOLM-alpha 1.1
 holm-alpha [gen|single|multi] <options> (<lists|tasks>)
 
-    gen     generate one or multiple lists from Hashes.org.
-            list names are provided with their names like '32', '40' or 'joomla'
-    single  execute a single task given by the task filename
-    multi   execute multiple task files, given as list of argument or all
-            files which are present in the 'tasks' folder
+    gen        generate one or multiple lists from Hashes.org.
+               list names are provided with their names like '32', '40' or 'joomla'
+    single     execute a single task given by the task filename
+    multi      execute multiple task files, given as list of argument or all
+               files which are present in the 'tasks' folder
+    update     just get the updates for given list(s)
 
-  --loop    when finished, HOLM will start again from the beginning
-            works for 'single' and 'multi'
-  --upload  automatically upload found hashes to Hashes.org after a task run
-  --old     instead of generating the new left lists, the old left are generated
-   -v [lev] set the logging level (0 is normal, 2 highest)
+  --loop       when finished, HOLM will start again from the beginning
+               works for 'single' and 'multi'
+  --upload     automatically upload found hashes to Hashes.org after a task run
+  --old        instead of generating the new left lists, the old left are generated
+  --out-prefix set a filename prefix or directory for the output files when generating
+   -v [lev]    set the logging level (0 is normal, 2 highest)
 ```
