@@ -26,15 +26,17 @@ void showHelp(){
     //show help
     cout << "HOLM-alpha " << HOLM_VERSION << endl;
     cout << "holm-alpha [gen|single|multi] <options> (<lists|tasks>)" << endl << endl;
-    cout << "    gen     generate one or multiple lists from Hashes.org." << endl;
-    cout << "            list names are provided with their names like '32', '40' or 'joomla'" << endl;
-    cout << "    single  execute a single task given by the task filename" << endl;
-    cout << "    multi   execute multiple task files, given as list of argument or all" << endl;
-    cout << "            files which are present in the 'tasks' folder" << endl << endl;
-    cout << "  --loop    when finished, HOLM will start again from the beginning" << endl;
-    cout << "            works for 'single' and 'multi'" << endl;
-    cout << "  --upload  automatically upload found hashes to Hashes.org after a task run" << endl;
-    cout << "  --old     instead of generating the new left lists, the old left are generated" << endl;
+    cout << "    gen        generate one or multiple lists from Hashes.org." << endl;
+    cout << "               list names are provided with their names like '32', '40' or 'joomla'" << endl;
+    cout << "    single     execute a single task given by the task filename" << endl;
+    cout << "    multi      execute multiple task files, given as list of argument or all" << endl;
+    cout << "               files which are present in the 'tasks' folder" << endl;
+    cout << "    update     just get the updates for given list(s)" << endl << endl;
+    cout << "  --loop       when finished, HOLM will start again from the beginning" << endl;
+    cout << "               works for 'single' and 'multi'" << endl;
+    cout << "  --upload     automatically upload found hashes to Hashes.org after a task run" << endl;
+    cout << "  --old        instead of generating the new left lists, the old left are generated" << endl;
+    cout << "  --out-prefix set a filename prefix or directory for the output files when generating" << endl;
     cout << "   -v [lev] set the logging level (0 is normal, 2 highest)" << endl << endl;
 }
 
@@ -96,6 +98,7 @@ int main(int argc, char *argv[]){
     bool uploading = false;
     int logLevel = 0; // 0 -> normal, 1 -> increased, 2 -> debug
     QList<QString> config;
+    QString prefix = "";
     for(int x=1;x<argc;x++){
         //filter out the global configurations
         if(strcmp(argv[x], "--loop") == 0){
@@ -106,6 +109,15 @@ int main(int argc, char *argv[]){
         }
         else if(strcmp(argv[x], "--upload") == 0){
             uploading = true;
+        }
+        else if(strcmp(argv[x], "--out-prefix") == 0){
+            if(x + 1 >= argc){
+                cout << "--out-prefix requires a file prefix path!" << endl << endl;
+                showHelp();
+                return 0;
+            }
+            prefix = argv[x + 1];
+            x++;
         }
         else if(strcmp(argv[x], "-v") == 0){
             if(x + 1 >= argc){
@@ -165,6 +177,23 @@ int main(int argc, char *argv[]){
         }
         //call single generation here
         gen.setLists(toGenerate, newLists);
+        gen.start();
+        QObject::connect(&gen, SIGNAL(finished()), &a, SLOT(quit()));
+    }
+    else if(config.at(0).compare("update") == 0){
+        //just update some left lists
+        task = GENERATE;
+        if(config.size() < 2){
+            cout << "Update requires at least one more argument!" << endl << endl;
+            showHelp();
+            return 0;
+        }
+        QList<QString> toGenerate;
+        for(int x=1;x<config.size();x++){
+            toGenerate.append(config.at(x));
+        }
+        //call single generation here
+        gen.setLists(toGenerate, newLists, true);
         gen.start();
         QObject::connect(&gen, SIGNAL(finished()), &a, SLOT(quit()));
     }

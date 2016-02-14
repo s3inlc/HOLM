@@ -20,7 +20,8 @@ class Generator : public QThread{
     Q_OBJECT
 public:
     explicit Generator(QObject *parent = 0);
-    void setLists(QList<QString> list, bool listType);
+    void setLists(QList<QString> list, bool listType, bool noGen = false);
+    void changePrefix(QString pre);
     static QByteArray fileChecksum(const QString &fileName, QCryptographicHash::Algorithm hashAlgorithm);
     static QString byteToStr(QByteArray arr);
     static QString fileGetContents(QString path);
@@ -49,6 +50,8 @@ private:
     int lastPercent;
     QNetworkAccessManager *downloadManager;
     QNetworkReply *downloadReply;
+    bool notGenerate;
+    QString prefix;
 };
 
 #endif // GENERATOR_H

@@ -8,6 +8,7 @@
 Generator::Generator(QObject *parent) : QThread(parent){
     lists.clear();
     newLists = true;
+    notGenerate = false;
     downloadManager = new QNetworkAccessManager();
     connect(this, SIGNAL(triggerDownloadFile(QString,bool)), this, SLOT(downloadFile(QString,bool)));
     connect(this, SIGNAL(triggerCheckChecksum(QString,bool)), this, SLOT(checkChecksum(QString,bool)));
@@ -15,10 +16,15 @@ Generator::Generator(QObject *parent) : QThread(parent){
     connect(this, SIGNAL(triggerCreateList(QString,bool)), this, SLOT(createList(QString,bool)));
 }
 
-void Generator::setLists(QList<QString> list, bool listType){
+void Generator::setLists(QList<QString> list, bool listType, bool noGen){
     Logger::log("Configured Generator to load " + QString::number(list.size()) + " lists!", DEBUG);
     lists = list;
     newLists = listType;
+    notGenerate = noGen;
+}
+
+void Generator::changePrefix(QString pre){
+    prefix = pre;
 }
 
 Generator::~Generator(){
@@ -52,10 +58,12 @@ void Generator::run(){
             while(checking){
                 usleep(100); //wait for loading the identifiers
             }
-            emit triggerCreateList(lists.at(x), newLists);
-            generating = true;
-            while(generating){
-                usleep(100); //waiting for the generation
+            if(!notGenerate){
+                emit triggerCreateList(lists.at(x), newLists);
+                generating = true;
+                while(generating){
+                    usleep(100); //waiting for the generation
+                }
             }
         }
         else{
@@ -74,10 +82,12 @@ void Generator::run(){
             while(checking){
                 usleep(100); //wait for loading the identifiers
             }
-            emit triggerCreateList(lists.at(x), newLists);
-            generating = true;
-            while(generating){
-                usleep(100); //waiting for the generation
+            if(!notGenerate){
+                emit triggerCreateList(lists.at(x), newLists);
+                generating = true;
+                while(generating){
+                    usleep(100); //waiting for the generation
+                }
             }
         }
         Logger::log("Finished " + lists.at(x) + "!", NORMAL);
@@ -162,6 +172,9 @@ void Generator::createList(QString name, bool newLists){
 
     //open list and file path to write to
     QString outputPath = name + "_";
+    if(prefix.length() > 0){
+        outputPath = prefix + outputPath;
+    }
     QString inputPath = DATA + QString("/") + name + "_";
     if(newLists){
         outputPath += "new.txt";
