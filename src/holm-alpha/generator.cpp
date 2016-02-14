@@ -98,9 +98,11 @@ void Generator::run(){
 void Generator::createList(QString name, bool newLists){
     //load all identifiers into RAM
     generating = true;
-    QMap<QString,DataSet> data;
+    QMap<QString,bool> data;
+    QMap<QString,DataSet> allData; //test if a separation of this can increase the speed
     Logger::log("Start list creation for " + name + "...", INCREASED);
     Logger::log("Load all identifiers...", NORMAL);
+    long long int start = QDateTime::currentMSecsSinceEpoch();
     for(int x=0;x<currentIdentifiers.size();x++){
         //get identifier file if existing
         QString identifierPath = DATA + QString("/") + currentIdentifiers.at(x) + ".txt";
@@ -132,13 +134,16 @@ void Generator::createList(QString name, bool newLists){
                 s.isNew = act;
                 s.salt = conv.data();
                 if(!data.keys().contains(hash)){
-                    data.insert(hash, s);
+                    data.insert(hash, act);
+                    allData.insert(hash, s);
                 }
-                else if(data.value(hash).isNew && !act){
+                else if(data.value(hash) && !act){
                     data.remove(hash);
+                    allData.remove(hash);
                 }
-                else if(!data.value(hash).isNew && act){
+                else if(!data.value(hash) && act){
                     data.remove(hash);
+                    allData.remove(hash);
                 }
             }
             else{
@@ -157,18 +162,23 @@ void Generator::createList(QString name, bool newLists){
                 s.isNew = act;
                 s.salt = "";
                 if(!data.keys().contains(hash)){
-                    data.insert(hash, s);
+                    data.insert(hash, act);
+                    allData.insert(hash, s);
                 }
-                else if(data.value(hash).isNew && !act){
+                else if(data.value(hash) && !act){
                     data.remove(hash);
+                    allData.remove(hash);
                 }
-                else if(!data.value(hash).isNew && act){
+                else if(!data.value(hash) && act){
                     data.remove(hash);
+                    allData.remove(hash);
                 }
             }
         }
     }
     Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
+    Logger::log("Required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
+    start = QDateTime::currentMSecsSinceEpoch();
 
     //open list and file path to write to
     QString outputPath = name + "_";
@@ -204,6 +214,12 @@ void Generator::createList(QString name, bool newLists){
     int delCount = 0;
     int addCount = 0;
 
+    Logger::log("Opening all files required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
+    start = QDateTime::currentMSecsSinceEpoch();
+
+    int counter = 0;
+    QString buffer = "";
+
     //go trough list and remove/add hashes
     while(!input.atEnd()){
         QString line = input.readLine().replace("\n", "");
@@ -212,26 +228,36 @@ void Generator::createList(QString name, bool newLists){
         }
         QStringList split = line.split(":");
         QString hash = split.at(0);
-        if(data.contains(hash) && !data.value(line).isNew){
+        if(data.contains(hash) && !data.value(line)){
             delCount++;
             continue;
         }
         else if(data.contains(line)){
             data.remove(line);
+            allData.remove(line);
         }
-        output.write(line.toUtf8() + "\n");
+        buffer += line + "\n";
+        //output.write(line.toUtf8() + "\n");
+        counter++;
+        if(counter > 10000){
+            output.write(buffer.toUtf8());
+            buffer = "";
+            counter = 0;
+        }
     }
-
+    output.write(buffer.toUtf8());
     input.close();
+    Logger::log("Going trough list required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
+    start = QDateTime::currentMSecsSinceEpoch();
 
     //add hashes which are not handled currently
     for(int x=0;x<data.size();x++){
-        if(!data.values().at(x).isNew){
+        if(!data.values().at(x)){
             continue;
         }
         addCount++;
-        if(data.value(data.keys().at(x)).salt.length() > 0){
-            output.write(data.keys().at(x).toUtf8() + ":" + data.value(data.keys().at(x)).salt.toUtf8() + "\n");
+        if(allData.value(data.keys().at(x)).salt.length() > 0){
+            output.write(allData.keys().at(x).toUtf8() + ":" + allData.value(allData.keys().at(x)).salt.toUtf8() + "\n");
         }
         else{
             output.write(data.keys().at(x).toUtf8() + "\n");
@@ -240,6 +266,7 @@ void Generator::createList(QString name, bool newLists){
     output.close();
 
     Logger::log("Added " + QString::number(addCount) + " hashes and removed " + QString::number(delCount) + " hashes from " + name, NORMAL);
+    Logger::log("Finalising required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
 
     generating = false;
 }
