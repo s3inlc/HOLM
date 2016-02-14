@@ -175,8 +175,8 @@ void Generator::createList(QString name, bool newLists){
                 }
                 check += QDateTime::currentMSecsSinceEpoch() - start;
             }
-            Logger::log("Time span: " + QString::number(handle) + ":" + QString::number(check), DEBUG);
         }
+        Logger::log("Time span: " + QString::number(handle) + ":" + QString::number(check), DEBUG);
     }
     Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
     Logger::log("Required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
