@@ -153,7 +153,7 @@ void Generator::createList(QString name, bool newLists){
                 else{
                     act = false;
                 }
-                if(!data.keys().contains(hash)){
+                if(!data.contains(hash)){
                     data.insert(hash, act);
                 }
                 else if(data.value(hash) && !act){
