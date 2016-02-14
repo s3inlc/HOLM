@@ -25,13 +25,6 @@
 #define UINT8 uint8_t
 #endif
 
-enum RunType {
-    NO_TYPE,
-    GENERATE,
-    SINGLE_TASK,
-    MULTI_TASK
-};
-
 enum BinaryType {
     EMPTY,
     OCLHASHCAT,

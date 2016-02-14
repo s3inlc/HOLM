@@ -92,7 +92,6 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    RunType task = NO_TYPE;
     bool looping = false;
     bool newLists = true;
     bool uploading = false;
@@ -165,7 +164,6 @@ int main(int argc, char *argv[]){
     }
     else if(config.at(0).compare("gen") == 0){
         //just generate some left lists
-        task = GENERATE;
         if(config.size() < 2){
             cout << "Generation requires at least one more argument!" << endl << endl;
             showHelp();
@@ -182,7 +180,6 @@ int main(int argc, char *argv[]){
     }
     else if(config.at(0).compare("update") == 0){
         //just update some left lists
-        task = GENERATE;
         if(config.size() < 2){
             cout << "Update requires at least one more argument!" << endl << endl;
             showHelp();
@@ -199,7 +196,6 @@ int main(int argc, char *argv[]){
     }
     else if(config.at(0).compare("single") == 0){
         //execute a single task
-        task = SINGLE_TASK;
         if(config.size() < 2){
             cout << "I need a task file to run!" << endl << endl;
             showHelp();
@@ -242,7 +238,6 @@ int main(int argc, char *argv[]){
     }
     else if(config.at(0).compare("multi") == 0){
         //execute all tasks within the task directory
-        task = MULTI_TASK;
         QStringList tasks;
         if(config.size() > 1){
             for(int x=1;x<config.size();x++){
