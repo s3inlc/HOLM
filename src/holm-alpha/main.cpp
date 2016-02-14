@@ -37,7 +37,7 @@ void showHelp(){
     cout << "  --upload     automatically upload found hashes to Hashes.org after a task run" << endl;
     cout << "  --old        instead of generating the new left lists, the old left are generated" << endl;
     cout << "  --out-prefix set a filename prefix or directory for the output files when generating" << endl;
-    cout << "   -v [lev] set the logging level (0 is normal, 2 highest)" << endl << endl;
+    cout << "   -v [lev]    set the logging level (0 is normal, 2 highest)" << endl << endl;
 }
 
 bool isValidList(QString name){
