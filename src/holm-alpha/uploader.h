@@ -8,6 +8,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QEventLoop>
+#include <QUrlQuery>
 #include "apimanager.h"
 #include "logger.h"
 #include "defines.h"
