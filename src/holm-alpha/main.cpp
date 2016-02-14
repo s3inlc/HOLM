@@ -171,7 +171,9 @@ int main(int argc, char *argv[]){
         }
         QList<QString> toGenerate;
         for(int x=1;x<config.size();x++){
-            toGenerate.append(config.at(x));
+            if(isValidList(config.at(x))){
+                toGenerate.append(config.at(x));
+            }
         }
         //call single generation here
         gen.setLists(toGenerate, newLists);
@@ -187,7 +189,9 @@ int main(int argc, char *argv[]){
         }
         QList<QString> toGenerate;
         for(int x=1;x<config.size();x++){
-            toGenerate.append(config.at(x));
+            if(isValidList(config.at(x))){
+                toGenerate.append(config.at(x));
+            }
         }
         //call single generation here
         gen.setLists(toGenerate, newLists, true);
