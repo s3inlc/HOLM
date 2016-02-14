@@ -149,7 +149,6 @@ void Generator::createList(QString name, bool newLists){
                 //unsalted hash
                 hash = list.at(y).mid(1);
                 if(hash.length() != name.toInt()){
-                    Logger::log("Jumping invalid line: " + list.at(y), DEBUG);
                     continue;
                 }
                 if(list.at(y).at(0) == '+'){
@@ -161,7 +160,7 @@ void Generator::createList(QString name, bool newLists){
                 DataSet s;
                 s.isNew = act;
                 s.salt = "";
-                if(searching.keys().contains(hash)){
+                if(!searching.keys().contains(hash)){
                     data.insert(hash, s);
                     searching.insert(hash, act);
                 }
