@@ -115,11 +115,14 @@ void Generator::createList(QString name, bool newLists){
         QString idData = fileGetContents(identifierPath);
         QStringList list = idData.replace("\r\n", "\n").split("\n");
         Logger::log(currentIdentifiers.at(x), INCREASED);
+        long long int handle = 0;
+        long long int check = 0;
         for(int y=0;y<list.size();y++){
             QString hash;
             bool act;
             if(list.at(y).contains(":")){
                 //salted list
+
                 hash = list.at(y).mid(1);
                 if(list.at(y).at(0) == '+'){
                     act = true;
@@ -145,6 +148,7 @@ void Generator::createList(QString name, bool newLists){
             }
             else{
                 //unsalted hash
+                long long int start = QDateTime::currentMSecsSinceEpoch();
                 hash = list.at(y).mid(1);
                 if(hash.length() != name.toInt()){
                     continue;
@@ -158,6 +162,8 @@ void Generator::createList(QString name, bool newLists){
                 DataSet s;
                 s.isNew = act;
                 s.salt = "";
+                handle += QDateTime::currentMSecsSinceEpoch() - start;
+                start = QDateTime::currentMSecsSinceEpoch();
                 if(!data.keys().contains(hash)){
                     data.insert(hash, s);
                 }
@@ -167,7 +173,9 @@ void Generator::createList(QString name, bool newLists){
                 else if(!data.value(hash).isNew && act){
                     data.remove(hash);
                 }
+                check += QDateTime::currentMSecsSinceEpoch() - start;
             }
+            Logger::log("Time span: " + QString::number(handle) + ":" + QString::number(check), DEBUG);
         }
     }
     Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
