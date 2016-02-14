@@ -51,18 +51,18 @@ void Generator::run(){
             emit triggerCheckChecksum(lists.at(x), newLists);
             checking = true;
             while(checking){
-                usleep(100); //waiting for the check
+                msleep(100); //waiting for the check
             }
             emit triggerGetIdentifiers();
             checking = true;
             while(checking){
-                usleep(100); //wait for loading the identifiers
+                msleep(100); //wait for loading the identifiers
             }
             if(!notGenerate){
                 emit triggerCreateList(lists.at(x), newLists);
                 generating = true;
                 while(generating){
-                    usleep(100); //waiting for the generation
+                    msleep(100); //waiting for the generation
                 }
             }
         }
@@ -70,23 +70,23 @@ void Generator::run(){
             emit triggerDownloadFile(lists.at(x), newLists);
             downloading = true;
             while(downloading){
-                usleep(100); //waiting for the download
+                msleep(100); //waiting for the download
             }
             emit triggerCheckChecksum(lists.at(x), newLists);
             checking = true;
             while(checking){
-                usleep(100); //waiting for the check
+                msleep(100); //waiting for the check
             }
             emit triggerGetIdentifiers();
             checking = true;
             while(checking){
-                usleep(100); //wait for loading the identifiers
+                msleep(100); //wait for loading the identifiers
             }
             if(!notGenerate){
                 emit triggerCreateList(lists.at(x), newLists);
                 generating = true;
                 while(generating){
-                    usleep(100); //waiting for the generation
+                    msleep(100); //waiting for the generation
                 }
             }
         }
