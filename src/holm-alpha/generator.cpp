@@ -116,8 +116,6 @@ void Generator::createList(QString name, bool newLists){
         QString idData = fileGetContents(identifierPath);
         QStringList list = idData.replace("\r\n", "\n").split("\n");
         Logger::log(currentIdentifiers.at(x), INCREASED);
-        long long int handle = 0;
-        long long int check = 0;
         for(int y=0;y<list.size();y++){
             QString hash;
             bool act;
@@ -149,7 +147,6 @@ void Generator::createList(QString name, bool newLists){
             }
             else{
                 //unsalted hash
-                //long long int start = QDateTime::currentMSecsSinceEpoch();
                 hash = list.at(y).mid(1);
                 if(hash.length() != name.toInt()){
                     continue;
@@ -163,8 +160,6 @@ void Generator::createList(QString name, bool newLists){
                 DataSet s;
                 s.isNew = act;
                 s.salt = "";
-                //handle += QDateTime::currentMSecsSinceEpoch() - start;
-                //start = QDateTime::currentMSecsSinceEpoch();
                 if(searching.keys().contains(hash)){
                     data.insert(hash, s);
                     searching.insert(hash, act);
@@ -177,10 +172,8 @@ void Generator::createList(QString name, bool newLists){
                     data.remove(hash);
                     searching.remove(hash);
                 }
-                //check += QDateTime::currentMSecsSinceEpoch() - start;
             }
         }
-        //Logger::log("Time span: " + QString::number(handle) + ":" + QString::number(check), DEBUG);
     }
     Logger::log("Loaded " + QString::number(searching.size()) + " hash entries!", NORMAL);
     Logger::log("Required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
