@@ -100,6 +100,7 @@ void Generator::createList(QString name, bool newLists){
     //load all identifiers into RAM
     generating = true;
     QHash<QString,DataSet> data;
+    QHash<QString,bool> searching;
     Logger::log("Start list creation for " + name + "...", INCREASED);
     Logger::log("Load all identifiers...", NORMAL);
     long long int start = QDateTime::currentMSecsSinceEpoch();
@@ -164,14 +165,17 @@ void Generator::createList(QString name, bool newLists){
                 s.salt = "";
                 //handle += QDateTime::currentMSecsSinceEpoch() - start;
                 //start = QDateTime::currentMSecsSinceEpoch();
-                if(!data.keys().contains(hash)){
+                if(searching.keys().contains(hash)){
                     data.insert(hash, s);
+                    searching.insert(hash, act);
                 }
-                else if(data.value(hash).isNew && !act){
+                else if(searching.value(hash) && !act){
                     data.remove(hash);
+                    searching.remove(hash);
                 }
-                else if(!data.value(hash).isNew && act){
+                else if(!searching.value(hash) && act){
                     data.remove(hash);
+                    searching.remove(hash);
                 }
                 //check += QDateTime::currentMSecsSinceEpoch() - start;
             }
