@@ -2,11 +2,10 @@
 
 [![Travis build status](https://travis-ci.org/s3inlc/holm.svg?branch=master)](https://travis-ci.org/s3inlc/holm)
 
-HOLM-alpha currently in development...
-
 You will be required to enter an API key from your Hashes.org account when running HOLM. It can be found on the settings page of your user account.
 
 Read [here](src/BUILD.md) about building HOLM.
+If you just would like to use HOLM without building, you could try one of the builds [here](bin/win).
 
 ## Generating left lists
 
