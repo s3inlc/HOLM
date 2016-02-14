@@ -13,11 +13,4 @@ notifications:
   email:
     on_success: never
     on_failure: always
-deploy:
-  provider: releases
-  api_key:
-    secure: tLNpGlcFVeWy86VkKDXnpJOGFrhaITAf8LPFRqO2v3lcCh+M5LdoO4EgFCZgksKm09LbNX9OJHm1CqsSemvrM8fAchWef9HwHwUMxRXFklKqCqYUpCcYISJH7SoqCoua/AFOVOoFoOnGQfTBRhD9xCvu/ohFTw5HV1x0NVyxqN9HKjB5PqaLL7RnKYM9nOgy3ppUnnMJgD4/dIWn+3Ar4KZfav9uUn0bTclXIgKgFjL3xQmNuwvuezdifQghRZ8Ww8abcikoJChLfstZAF201+tyXpwVoAt6TSYmZP7ld4aLDFh8U3rFdNP3mfQyEqYqTtD02lhTJRN6b8oNLIjgmYlXCZb6n6UaQ4DXEcZd66mxU04/Gayq2HSBBxzCRW2n+OZLhx6Ds4S1cAVcl+tnSA8NPyfm3qBVmsnQ6DwTxH9mUKNrIshDaAFG84BvuYMSxGgpRmxw2e4ym1ZU8s+ROnE3HRI3YUzXwPCBT91eojvbakwRF94y64M1Itzqb/U1Npj2ArtFtZkdzLjaj5pk3gSavb3ZOGuHFIZFl5B+Qge3O32wQ0mhFz6egRK9Ez4YArgCLdLSTHXA6jfHsBeKcfidQuKc36SzK6YBBIUi2QW2l+eQDbdQB1OIFTcVynI4Y9CBH0zLoxqtbs43lYzTsDlgkeQgHIigux9tQC1btCg=
-  file: "holm-alpha"
-  skip_cleanup: true
-  on:
-    tags: true
+
