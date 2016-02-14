@@ -5,7 +5,7 @@
 You will be required to enter an API key from your Hashes.org account when running HOLM. It can be found on the settings page of your user account.
 
 Read [here](src/BUILD.md) about building HOLM.
-If you just would like to use HOLM without building, you could try one of the builds [here](bin/win).
+If you just would like to use HOLM without building, you could try one of the non-versioned builds [here](bin/win) or the releases [here](../../releases).
 
 ## Generating left lists
 
