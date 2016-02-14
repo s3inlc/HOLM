@@ -99,7 +99,7 @@ void Generator::run(){
 void Generator::createList(QString name, bool newLists){
     //load all identifiers into RAM
     generating = true;
-    QMap<QString,DataSet> data;
+    QHash<QString,DataSet> data;
     Logger::log("Start list creation for " + name + "...", INCREASED);
     Logger::log("Load all identifiers...", NORMAL);
     long long int start = QDateTime::currentMSecsSinceEpoch();
