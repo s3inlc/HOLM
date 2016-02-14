@@ -148,7 +148,7 @@ void Generator::createList(QString name, bool newLists){
             }
             else{
                 //unsalted hash
-                long long int start = QDateTime::currentMSecsSinceEpoch();
+                //long long int start = QDateTime::currentMSecsSinceEpoch();
                 hash = list.at(y).mid(1);
                 if(hash.length() != name.toInt()){
                     continue;
@@ -162,8 +162,8 @@ void Generator::createList(QString name, bool newLists){
                 DataSet s;
                 s.isNew = act;
                 s.salt = "";
-                handle += QDateTime::currentMSecsSinceEpoch() - start;
-                start = QDateTime::currentMSecsSinceEpoch();
+                //handle += QDateTime::currentMSecsSinceEpoch() - start;
+                //start = QDateTime::currentMSecsSinceEpoch();
                 if(!data.keys().contains(hash)){
                     data.insert(hash, s);
                 }
@@ -173,10 +173,10 @@ void Generator::createList(QString name, bool newLists){
                 else if(!data.value(hash).isNew && act){
                     data.remove(hash);
                 }
-                check += QDateTime::currentMSecsSinceEpoch() - start;
+                //check += QDateTime::currentMSecsSinceEpoch() - start;
             }
         }
-        Logger::log("Time span: " + QString::number(handle) + ":" + QString::number(check), DEBUG);
+        //Logger::log("Time span: " + QString::number(handle) + ":" + QString::number(check), DEBUG);
     }
     Logger::log("Loaded " + QString::number(data.size()) + " hash entries!", NORMAL);
     Logger::log("Required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
