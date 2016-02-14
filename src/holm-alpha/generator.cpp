@@ -149,6 +149,7 @@ void Generator::createList(QString name, bool newLists){
                 //unsalted hash
                 hash = list.at(y).mid(1);
                 if(hash.length() != name.toInt()){
+                    Logger::log("Jumping invalid line: " + list.at(y), DEBUG);
                     continue;
                 }
                 if(list.at(y).at(0) == '+'){
