@@ -14,7 +14,6 @@ void MultiTask::setTasks(QStringList t, bool up){
     uploading = up;
     QObject::connect(&gen, SIGNAL(finished()), &exec, SLOT(start()));
     if(uploading){
-        uploader.setConfiguration(parser.getConfiguration());
         QObject::connect(&exec, SIGNAL(finished()), &uploader, SLOT(doUpload()));
         QObject::connect(&uploader, SIGNAL(finished()), this, SLOT(taskFinished()));
     }
@@ -48,6 +47,9 @@ void MultiTask::nextTask(){
     set.append(parser.getList());
     gen.setLists(set, parser.isNewList());
     exec.setCallString(parser.getCallString());
+    if(uploading){
+        uploader.setConfiguration(parser.getConfiguration());
+    }
     Logger::log("Start task '" + tasks.at(taskPos) + "'...", NORMAL);
     gen.start();
 }
