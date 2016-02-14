@@ -13,6 +13,7 @@
 #include <QNetworkReply>
 #include <QFile>
 #include <sstream>
+#include <QFileInfo>
 #include "logger.h"
 #include "apimanager.h"
 

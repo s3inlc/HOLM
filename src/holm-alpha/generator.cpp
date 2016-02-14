@@ -173,6 +173,10 @@ void Generator::createList(QString name, bool newLists){
     //open list and file path to write to
     QString outputPath = name + "_";
     if(prefix.length() > 0){
+        QFileInfo test(prefix);
+        if(test.exists() && test.isDir()){
+            prefix += "/";
+        }
         outputPath = prefix + outputPath;
     }
     QString inputPath = DATA + QString("/") + name + "_";
