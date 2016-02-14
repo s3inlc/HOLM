@@ -20,4 +20,4 @@ deploy:
   file: "holm-alpha"
   skip_cleanup: true
   on:
-    tags: running-alpha
+    tags: true
