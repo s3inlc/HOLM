@@ -68,10 +68,12 @@ void Generator::run(){
             }
         }
         else{
-            emit triggerDownloadFile(lists.at(x), newLists);
-            downloading = true;
-            while(downloading){
-                msleep(100); //waiting for the download
+            if(lists.at(x).compare("42") != 0){
+                emit triggerDownloadFile(lists.at(x), newLists);
+                downloading = true;
+                while(downloading){
+                    msleep(100); //waiting for the download
+                }
             }
             emit triggerCheckChecksum(lists.at(x), newLists);
             checking = true;
@@ -145,7 +147,9 @@ void Generator::createList(QString name, bool newLists){
                 //unsalted hash
                 hash = list.at(y).mid(1);
                 if(hash.length() != name.toInt()){
-                    continue;
+                    if(hash.length() != 32 || name.toInt() != 42){
+                        continue;
+                    }
                 }
                 if(list.at(y).at(0) == '+'){
                     act = true;
@@ -194,10 +198,12 @@ void Generator::createList(QString name, bool newLists){
         generating = false;
         return;
     }
-    if(!input.open(QIODevice::ReadOnly)){
-        Logger::log("Failed to open input list file!", NORMAL);
-        generating = false;
-        return;
+    if(name.compare("42") != 0){
+        if(!input.open(QIODevice::ReadOnly)){
+            Logger::log("Failed to open input list file!", NORMAL);
+            generating = false;
+            return;
+        }
     }
 
     int delCount = 0;
@@ -210,31 +216,33 @@ void Generator::createList(QString name, bool newLists){
     QString buffer = "";
 
     //go trough list and remove/add hashes
-    while(!input.atEnd()){
-        QString line = input.readLine().replace("\n", "");
-        if(line.length() == 0){
-            continue;
+    if(name.compare("42") != 0){
+        while(!input.atEnd()){
+            QString line = input.readLine().replace("\n", "");
+            if(line.length() == 0){
+                continue;
+            }
+            QStringList split = line.split(":");
+            QString hash = split.at(0);
+            if(data.contains(hash) && !data.value(line)){
+                delCount++;
+                continue;
+            }
+            else if(data.contains(line)){
+                data.remove(line);
+            }
+            buffer += line + "\n";
+            //output.write(line.toUtf8() + "\n");
+            counter++;
+            if(counter > 10000){
+                output.write(buffer.toUtf8());
+                buffer = "";
+                counter = 0;
+            }
         }
-        QStringList split = line.split(":");
-        QString hash = split.at(0);
-        if(data.contains(hash) && !data.value(line)){
-            delCount++;
-            continue;
-        }
-        else if(data.contains(line)){
-            data.remove(line);
-        }
-        buffer += line + "\n";
-        //output.write(line.toUtf8() + "\n");
-        counter++;
-        if(counter > 10000){
-            output.write(buffer.toUtf8());
-            buffer = "";
-            counter = 0;
-        }
+        output.write(buffer.toUtf8());
+        input.close();
     }
-    output.write(buffer.toUtf8());
-    input.close();
     Logger::log("Going trough list required " + QString::number(QDateTime::currentMSecsSinceEpoch() - start) + "ms", DEBUG);
     start = QDateTime::currentMSecsSinceEpoch();
 
@@ -316,6 +324,9 @@ void Generator::checkChecksum(QString name, bool newLists){
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     Logger::log("Check checksum...", INCREASED);
     QString hashCode = byteToStr(fileChecksum(path, QCryptographicHash::Sha1));
+    if(name.compare("42") == 0){
+        hashCode = "00123689834534";
+    }
     ApiManager apiManager;
     QUrl url(QString(API) + "?holm=sumcheck&key=" + apiManager.getKey() + "&sum=" + hashCode);
     Logger::log("CALL: " + url.toString(), DEBUG);

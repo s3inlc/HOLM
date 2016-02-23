@@ -58,7 +58,7 @@ bool isValidList(QString name){
     else if(name.compare("56") == 0 || name.compare("64") == 0 || name.compare("80") == 0){
         return true;
     }
-    else if(name.compare("96") == 0 || name.compare("128") == 0){
+    else if(name.compare("96") == 0 || name.compare("128") == 0 || name.compare("42") == 0){
         return true;
     }
     return false;
